@@ -765,7 +765,7 @@ public class TileEntityScreen extends TileEntity {
                             if(chr == 1)
                                 break;
 
-                            scr.browser.injectKeyTyped(chr, 0);
+                            scr.browser.injectKeyTyped(chr, 0, 0);
                         }
                     } else {
                         TypeData[] data = WebDisplays.GSON.fromJson(text, TypeData[].class);
@@ -781,7 +781,7 @@ public class TileEntityScreen extends TileEntity {
                                     break;
 
                                 case TYPE:
-                                    scr.browser.injectKeyTyped(ev.getKeyChar(), 0);
+                                    scr.browser.injectKeyTyped(ev.getKeyChar(), 0, 0);
                                     break;
 
                                 default:

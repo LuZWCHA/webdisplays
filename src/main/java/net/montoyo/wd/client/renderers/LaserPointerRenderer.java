@@ -36,7 +36,6 @@ public final class LaserPointerRenderer implements IItemRenderer {
 
     @Override
     public final void render(ItemStack is, float handSideSign, float swingProgress, float equipProgress) {
-        //This whole method is a fucking hack
         float sqrtSwingProg = (float) Math.sqrt((double) swingProgress);
         float sinSqrtSwingProg1 = MathHelper.sin(sqrtSwingProg * PI);
 
@@ -114,7 +113,7 @@ public final class LaserPointerRenderer implements IItemRenderer {
             glPopMatrix();
         }
 
-        GlStateManager.enableTexture2D(); //Fix for shitty minecraft fire
+        GlStateManager.enableTexture2D();
     }
 
 }

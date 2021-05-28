@@ -1,3 +1,5 @@
+import groovy.transform.Field
+
 buildscript {
     repositories {
         jcenter()
@@ -10,8 +12,11 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-
-version = "1.12.2-1.1"
+@Field
+def cct_version = '1.89.1'
+@Field
+def mc_version = '1.12.2'
+version = "1.12.2-1.2"
 group = "net.montoyo.wd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "webdisplays"
 
@@ -23,7 +28,7 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2768"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -33,7 +38,40 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+
+repositories {
+    maven {
+        name = "cctweak"
+        url = 'https://squiddev.cc/maven'
+    }
+    maven {
+        name = 'opencomputers'
+        url = "http://maven.cil.li/"
+    }
+}
+
+
 dependencies {
+    deobfProvided "org.squiddev:cc-tweaked-${mc_version}:${cct_version}"
+    compile "li.cil.oc:OpenComputers:MC1.12.2-1.7.5.217:api"
+}
+
+sourceSets {
+    main {
+        output.resourcesDir = output.classesDir
+    }
+}
+
+task clearSourcesDir {
+    delete(sourceSets.main.output.classesDir)
+}
+
+gradle.taskGraph.whenReady{
+    taskGraph ->
+        if(taskGraph.hasTask(":reobfJar")){
+            clearSourcesDir
+            sourceSets.main.output.resourcesDir(new File("build/resources"))
+        }
 }
 
 jar {
@@ -45,16 +83,16 @@ jar {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", mc_version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': mc_version
     }
-        
+
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

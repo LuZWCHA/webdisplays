@@ -97,7 +97,7 @@ public class GuiMinePad extends WDScreen {
                     pad.view.injectKeyReleasedByKeyCode(keycode, key, 0);
 
                 if(key != 0)
-                    pad.view.injectKeyTyped(key, 0);
+                    pad.view.injectKeyTyped(key, 0, 0);
             }
         }
 
